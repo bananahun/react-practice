@@ -1,51 +1,59 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
-import ToDoDetail from "./ToDoDetail";
+import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
+import './styles.css'; 
 
-function App() {
-  const [toDo, setToDo] = useState("");
-  const [toDos, setToDos] = useState([]);
+const App = () => {
+  const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
 
-  const onChange = (event) => setToDo(event.target.value);
+  const createTodo = (text) => ({
+    id: uuidv4(),
+    text,
+    completed: false
+  });
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    if (toDo === "") {
-      return;
+  const addTodo = () => {
+    if (todo.trim() !== "") {
+      const newTodo = createTodo(todo);
+      setTodos([...todos, newTodo]);
+      setTodo("");
     }
-    setToDos((currentArray) => [
-      ...currentArray,
-      { id: Date.now(), text: toDo },
-    ]);
-    setToDo("");
   };
 
-  const deleteToDo = (id) => {
-    setToDos((currentArray) => currentArray.filter((todo) => todo.id !== id));
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
   };
 
   return (
-    <div>
-      <h1>My To Do List {toDos.length}</h1>
-      <form onSubmit={onSubmit}>
+    <div className="container">
+      <h1>할 일 목록</h1>
+      <form onSubmit={(e) => e.preventDefault()}>
         <input
-          onChange={onChange}
-          value={toDo}
           type="text"
-          placeholder="할 일을 입력해주세요"
+          value={todo}
+          onChange={(e) => setTodo(e.target.value)}
+          placeholder="새 할 일을 입력하세요"
         />
-        <button>추가</button>
+        <button onClick={addTodo}>추가</button>
       </form>
       <ul>
-        {toDos.map((item) => (
-          <li key={item.id}>
-            <Link to={`/todos/${item.id}`}>{item.text}</Link>
-            <button onClick={() => deleteToDo(item.id)}>X</button>
+        {todos.map(todo => (
+          <li
+            key={todo.id}
+            style={{
+              textDecoration: todo.completed ? "line-through" : "none"
+            }}
+          >
+            <Link to={{ pathname: `/todo/${todo.id}`, state: { todos } }}>
+              {todo.text}
+            </Link>
+            <button onClick={() => deleteTodo(todo.id)}>삭제</button>
           </li>
         ))}
       </ul>
     </div>
   );
-}
+};
 
 export default App;
