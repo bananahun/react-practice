@@ -106,7 +106,7 @@ const Character = () => {
       }
 
       if (handled) {
-        e.preventDefault(); // Prevent default scrolling behavior for arrow keys
+        e.preventDefault();
       }
     },
     [catX, catY, stepIndex]

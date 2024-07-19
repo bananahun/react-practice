@@ -1,11 +1,11 @@
-import char_1d1 from "./assets/char_1d1.png";
-import char_1d2 from "./assets/char_1d2.png";
-import char_1d3 from "./assets/char_1d3.png";
-import char_1d4 from "./assets/char_1d4.png";
-import char_1d5 from "./assets/char_1d5.png";
-import char_1d6 from "./assets/char_1d6.png";
-import char_1d7 from "./assets/char_1d7.png";
-import char_1d8 from "./assets/char_1d8.png";
+import char_1d1 from "./assets/char_1u1.png";
+import char_1d2 from "./assets/char_1u2.png";
+import char_1d3 from "./assets/char_1u3.png";
+import char_1d4 from "./assets/char_1u4.png";
+import char_1d5 from "./assets/char_1u5.png";
+import char_1d6 from "./assets/char_1u6.png";
+import char_1d7 from "./assets/char_1u7.png";
+import char_1d8 from "./assets/char_1u8.png";
 import char_1u1 from "./assets/char_1d1.png";
 import char_1u2 from "./assets/char_1d2.png";
 import char_1u3 from "./assets/char_1d3.png";
@@ -14,22 +14,22 @@ import char_1u5 from "./assets/char_1d5.png";
 import char_1u6 from "./assets/char_1d6.png";
 import char_1u7 from "./assets/char_1d7.png";
 import char_1u8 from "./assets/char_1d8.png";
-import char_1r1 from "./assets/char_1d1.png";
-import char_1r2 from "./assets/char_1d2.png";
-import char_1r3 from "./assets/char_1d3.png";
-import char_1r4 from "./assets/char_1d4.png";
-import char_1r5 from "./assets/char_1d5.png";
-import char_1r6 from "./assets/char_1d6.png";
-import char_1r7 from "./assets/char_1d7.png";
-import char_1r8 from "./assets/char_1d8.png";
-import char_1l1 from "./assets/char_1d1.png";
-import char_1l2 from "./assets/char_1d2.png";
-import char_1l3 from "./assets/char_1d3.png";
-import char_1l4 from "./assets/char_1d4.png";
-import char_1l5 from "./assets/char_1d5.png";
-import char_1l6 from "./assets/char_1d6.png";
-import char_1l7 from "./assets/char_1d7.png";
-import char_1l8 from "./assets/char_1d8.png";
+import char_1r1 from "./assets/char_1r1.png";
+import char_1r2 from "./assets/char_1r2.png";
+import char_1r3 from "./assets/char_1r3.png";
+import char_1r4 from "./assets/char_1r4.png";
+import char_1r5 from "./assets/char_1r5.png";
+import char_1r6 from "./assets/char_1r6.png";
+import char_1r7 from "./assets/char_1r7.png";
+import char_1r8 from "./assets/char_1r8.png";
+import char_1l1 from "./assets/char_1l1.png";
+import char_1l2 from "./assets/char_1l2.png";
+import char_1l3 from "./assets/char_1l3.png";
+import char_1l4 from "./assets/char_1l4.png";
+import char_1l5 from "./assets/char_1l5.png";
+import char_1l6 from "./assets/char_1l6.png";
+import char_1l7 from "./assets/char_1l7.png";
+import char_1l8 from "./assets/char_1l8.png";
 
 const init = {};
 const imageSrc = {
@@ -78,3 +78,4 @@ const CharacterImages = Object.entries(imageSrc).reduce(
 );
 
 export default CharacterImages;
+
