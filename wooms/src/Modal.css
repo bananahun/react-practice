@@ -1,5 +1,5 @@
 .modal-overlay {
-    background-image: url('/path/to/your/background-image.jpg'); /* 배경 이미지 파일 경로 */
+    background-image: url('assets\modal.png'); /* 배경 이미지 파일 경로 */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
