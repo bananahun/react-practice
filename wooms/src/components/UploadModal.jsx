@@ -1,33 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import pixelit from '../libs/pixelit';
 
 function UploadModal({ onClose }) {
   const [files, setFiles] = useState([]);
+  const [pixelCanvas, setPixelCanvas] = useState(null);
+  const canvasRef = useRef(null);
 
   const handleDragOver = (e) => {
-    e.preventDefault(); // 기본 동작 방지
-    e.dataTransfer.dropEffect = 'copy'; // 드래그 효과 설정
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
   };
 
   const handleDrop = (e) => {
-    e.preventDefault(); // 기본 동작 방지
+    e.preventDefault();
     const droppedFiles = Array.from(e.dataTransfer.files);
-    setFiles((prevFiles) => [...prevFiles, ...droppedFiles]); // 드롭된 파일 추가
+    setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
   };
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]); // 선택된 파일 추가
+    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
   };
 
   const handleUpload = () => {
     if (files.length > 0) {
-      alert(`${files.length}개의 사진이 업로드되었습니다!`); // 예시
-      setFiles([]); // 업로드 후 파일 리스트 초기화
+      alert(`${files.length}개의 사진이 업로드되었습니다!`);
+      setFiles([]);
     } else {
       alert('업로드할 파일이 없습니다.');
     }
-    onClose(); // 모달 닫기
+    onClose();
   };
+
+  useEffect(() => {
+    if (files.length > 0) {
+      const imgFile = files[0]; // 첫 번째 파일을 사용
+      const canvas = canvasRef.current;
+      if (!canvas) {
+        console.error('Canvas element not found');
+        return;
+      }
+
+      const px = new pixelit({
+        to: canvas,
+        scale: 8, // 원하는 픽셀화 정도 설정
+      });
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target.result; // FileReader로 읽은 이미지 URL 설정
+        img.onload = () => {
+          // 이미지가 완전히 로드된 후에 픽셀화 처리
+          px.setFromImgSource(img.src).draw().pixelate();
+          setPixelCanvas(canvas.toDataURL()); // 캔버스의 데이터를 상태에 저장
+        };
+      };
+      reader.readAsDataURL(imgFile);
+    }
+  }, [files]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -74,6 +105,13 @@ function UploadModal({ onClose }) {
             </ul>
           )}
         </div>
+        {pixelCanvas && (
+          <div className="mt-4">
+            <h3 className="text-lg font-bold">픽셀 아트 변환 결과</h3>
+            <img src={pixelCanvas} alt="픽셀 아트" className="mt-2" />
+          </div>
+        )}
+        <canvas id="pixelitcanvas" ref={canvasRef} className="hidden"></canvas>
         <div className="flex justify-end">
           <button className="bg-blue-500 text-white p-2 rounded mr-2" onClick={handleUpload}>
             업로드
