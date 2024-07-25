@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Modal from './components/Modal';
 import './index.css';
+import PhotoModal from './photo/PhotoModal';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,7 +14,7 @@ function App() {
         Photo
       </button>
 
-      {isModalOpen && <Modal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && <PhotoModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 }

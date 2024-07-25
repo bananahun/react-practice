@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import DetailView from './DetailView';
-import ImageModal from './ImageModal';
+import ItemModal from './ItemModal';
+import DetailModal from './DetailModal';
 import UploadModal from './UploadModal';
 
 const imageGroups = [
@@ -38,14 +38,13 @@ const imageGroups = [
   },
 ];
 
-function Modal({ onClose }) {
+function PhotoModal({ onClose }) {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false); // 상태 정의
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
-
-  const itemsPerPage = 6; // 한 페이지당 표시할 이미지 그룹 수
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(imageGroups.length / itemsPerPage);
 
   const handleGroupClick = (group) => {
@@ -55,7 +54,6 @@ function Modal({ onClose }) {
 
   const handleBackToGroups = () => {
     setSelectedGroup(null);
-    setCurrentPage(0);
   };
 
   const handleImageClick = (src) => {
@@ -76,23 +74,21 @@ function Modal({ onClose }) {
 
   const handleUploadClick = () => {
     setIsUploadModalOpen(true);
-  }
+  };
 
   const handleUploadClose = () => {
     setIsUploadModalOpen(false);
-  }
+  };
 
-  // 현재 페이지에서 보여줄 이미지 그룹 가져오기
   const currentGroups = imageGroups.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage);
-  
-  // 빈 div를 추가하여 항상 6개의 요소가 있도록 함
+
   const emptyDivs = Array.from({ length: itemsPerPage - currentGroups.length }, (_, index) => (
-    <div key={`empty-${index}`} className="w-32 h-32" /> // 빈 div 설정
+    <div key={`empty-${index}`} className="w-32 h-32" />
   ));
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center m-0 p-0">
-      <div className="bg-white p-0 rounded-lg w-[800px] h-[600px] relative flex flex-col justify-center m-0 p-0">
+      <div className="bg-white p-0 rounded-lg w-[700px] h-[500px] relative flex flex-col justify-center m-0 p-0">
         <button className="absolute top-2 left-2 text-xl" onClick={onClose}>
           &times;
         </button>
@@ -101,9 +97,9 @@ function Modal({ onClose }) {
         </button>
 
         {selectedImage ? (
-          <ImageModal src={selectedImage} onClose={handleImageClose} />
+          <DetailModal src={selectedImage} onClose={handleImageClose} />
         ) : selectedGroup ? (
-          <DetailView
+          <ItemModal
             group={selectedGroup}
             onBack={handleBackToGroups}
             onImageClick={handleImageClick}
@@ -117,24 +113,24 @@ function Modal({ onClose }) {
                     <img 
                       src={group.images[0]} 
                       alt={`Group ${group.date}`} 
-                      className="w-32 h-32 object-cover" // 사진 크기 고정
+                      className="w-32 h-32 object-cover"
                     />
                   </div>
                 ))}
-                {emptyDivs} {/* 빈 div 추가 */}
+                {emptyDivs}
               </div>
             </div>
             <div>
               <div className="absolute left-0 right-0 flex justify-between items-center transform -translate-y-1/2 top-1/2">
                 <button
-                  className="bg-blue-500 text-white p-2 rounded"
+                  className={`bg-blue-500 text-white p-2 rounded ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={handlePrevPage}
                   disabled={currentPage === 0}
                 >
                   Prev
                 </button>
                 <button
-                  className="bg-blue-500 text-white p-2 rounded"
+                  className={`bg-blue-500 text-white p-2 rounded ${currentPage >= totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={handleNextPage}
                   disabled={currentPage >= totalPages - 1}
                 >
@@ -145,9 +141,9 @@ function Modal({ onClose }) {
           </>
         )}
       </div>
-      {isUploadModalOpen && <UploadModal onClose={handleUploadClose} />} {/* 업로드 모달 렌더링 */}
+      {isUploadModalOpen && <UploadModal onClose={handleUploadClose} />} 
     </div>
   );
 }
 
-export default Modal;
+export default PhotoModal;
