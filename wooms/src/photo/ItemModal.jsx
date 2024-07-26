@@ -27,10 +27,10 @@ function ItemModal({ group, onBack, onImageClick }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center m-0 p-0">
-      <div className="bg-white p-0 rounded-lg w-[700px] h-[500px] relative flex flex-col justify-center m-0 p-0">
-        <button className="absolute top-2 left-2 text-xl" onClick={onBack}>
-          &times;
-        </button>
+      {/* 모달창 */}
+      <div className="bg-modal-bg bg-cover bg-center p-0 rounded-lg w-[700px] h-[447px] relative flex flex-col justify-center m-0 p-0">
+        {/* 닫힘 버튼 */}
+        <button className="absolute top-3 left-5 w-6 h-6 bg-close-bt bg-cover" onClick={onBack} />
         <div className="flex justify-center mt-4">
           <div className="grid grid-cols-3 gap-4 max-w-[600px]">
             {currentImages.map((src, index) => (
@@ -47,21 +47,19 @@ function ItemModal({ group, onBack, onImageClick }) {
           </div>
         </div>
         <div>
-          <div className="absolute left-0 right-0 flex justify-between items-center transform -translate-y-1/2 top-1/2">
+          {/* 이전페이지 이동 버튼 */}
+          {/* 다음페이지 이동 버튼 */}
+          <div className="absolute left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2">
             <button
-              className={`bg-blue-500 text-white p-2 rounded ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-8 h-8 bg-left-bt bg-cover ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={handlePrevPage}
               disabled={currentPage === 0}
-            >
-              Prev
-            </button>
+            />
             <button
-              className={`bg-blue-500 text-white p-2 rounded ${currentPage >= totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-8 h-8 bg-right-bt bg-cover ${currentPage >= totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={handleNextPage}
               disabled={currentPage >= totalPages - 1}
-            >
-              Next
-            </button>
+            />
           </div>
         </div>
       </div>

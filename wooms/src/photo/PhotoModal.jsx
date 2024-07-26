@@ -88,13 +88,18 @@ function PhotoModal({ onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center m-0 p-0">
-      <div className="bg-white p-0 rounded-lg w-[700px] h-[500px] relative flex flex-col justify-center m-0 p-0">
-        <button className="absolute top-2 left-2 text-xl" onClick={onClose}>
-          &times;
-        </button>
-        <button className="absolute top-2 right-2 bg-blue-500 text-white p-2 rounded" onClick={handleUploadClick}>
-          Upload
-        </button>
+      {/* 모달창 */}
+      <div className="bg-modal-bg bg-cover bg-center p-0 rounded-lg w-[700px] h-[447px] relative flex flex-col justify-center m-0 p-0">
+        {/* 닫힘 버튼 */}
+        <button className="absolute top-3 left-5 w-6 h-6 bg-close-bt bg-cover" onClick={onClose} />
+        {/* 업로드 버튼 */}
+        <div className="absolute top-4 right-6 flex items-center p-2 rounded cursor-pointer" 
+          onClick={handleUploadClick}
+          style={{ backgroundColor: '#aa7959' }}
+        >
+          <div className="w-6 h-6 bg-plus-bt bg-cover"></div>
+          <span className="ml-2 text-sm">사진 추가</span>
+        </div>
 
         {selectedImage ? (
           <DetailModal src={selectedImage} onClose={handleImageClose} />
@@ -121,21 +126,19 @@ function PhotoModal({ onClose }) {
               </div>
             </div>
             <div>
-              <div className="absolute left-0 right-0 flex justify-between items-center transform -translate-y-1/2 top-1/2">
+              {/* 이전페이지 이동 버튼 */}
+              {/* 다음페이지 이동 버튼 */}
+              <div className="absolute left-2 right-2 flex justify-between items-center transform -translate-y-1/2 top-1/2">
                 <button
-                  className={`bg-blue-500 text-white p-2 rounded ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-8 h-8 bg-left-bt bg-cover ${currentPage === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={handlePrevPage}
                   disabled={currentPage === 0}
-                >
-                  Prev
-                </button>
+                />
                 <button
-                  className={`bg-blue-500 text-white p-2 rounded ${currentPage >= totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-8 h-8 bg-right-bt bg-cover ${currentPage >= totalPages - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={handleNextPage}
                   disabled={currentPage >= totalPages - 1}
-                >
-                  Next
-                </button>
+                />
               </div>
             </div>
           </>

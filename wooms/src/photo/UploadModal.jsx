@@ -128,63 +128,60 @@ function UploadModal({ onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center m-0 p-0">
-      <div className="bg-white p-0 rounded-lg w-[700px] h-[500px] relative flex flex-col justify-center m-0 p-0">
-        <button className="absolute top-2 left-2 text-xl" onClick={onClose}>
-          &times;
-        </button>
-        <h2 className="text-lg font-bold mb-4">사진 업로드</h2>
-        <div
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          className="border-2 border-dashed border-gray-400 p-4 mb-4 text-center"
-          style={{ minHeight: '100px' }}
-        >
-          <p>여기에 파일을 드래그 앤 드롭하세요!</p>
-          <label className="cursor-pointer text-blue-500 underline">
-            파일 선택하기
-            <input 
-              type="file" 
-              accept="image/*" 
-              onChange={handleFileChange} 
-              multiple 
-              className="hidden" 
-            />
-          </label>
-        </div>
-        <div>
-          {files.length > 0 && (
-            <ul className="list-disc pl-5 mb-4">
-              {files.map((file, index) => (
-                <li key={index}>
-                  {file.name}
-                  <img 
-                    src={URL.createObjectURL(file)} 
-                    alt={file.name} 
-                    className="mt-2 w-20 h-20 object-cover max-w-full max-h-[300px]" 
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-        {pixelCanvas && (
-          <div className="mt-4">
-            <h3 className="text-lg font-bold">픽셀 아트 변환 결과</h3>
-            <img 
-              src={pixelCanvas} 
-              alt="픽셀 아트" 
-              className="mt-2 max-w-full max-h-[300px]" 
-            />
+      {/* 모달창 */}
+      <div className="bg-modal-bg bg-cover bg-center p-0 rounded-lg w-[700px] h-[447px] relative flex flex-col justify-center m-0 p-0">
+        {/* 닫힘 버튼 */}
+        <button className="absolute top-3 left-5 w-6 h-6 bg-close-bt bg-cover" onClick={onClose} />
+        {!pixelCanvas ? (
+          <div
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className="w-[300px] h-[200px] border-2 border-dashed p-4 mb-4 text-center mx-auto"
+            style={{ borderColor: '#aa7959' }}
+          >
+            <p style={{ color: '#aa7959' }}>여기에 파일을 드래그 앤 드롭하세요!</p>
+            <label className="cursor-pointer">
+              <img 
+                src="assets/FileBt.png" // 여기에 이미지 경로를 입력하세요
+                alt="파일 선택 아이콘"
+                className="w-20 h-20 mx-auto" // 이미지 크기를 조정합니다
+              />
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handleFileChange} 
+                multiple 
+                className="hidden" 
+              />
+            </label>
+          </div>
+        ) : (
+          <div className="flex justify-center space-x-4 mb-4">
+            <div className="flex flex-col items-center">
+              <img 
+                src={URL.createObjectURL(files[0])} 
+                alt={files[0].name} 
+                className="w-40 h-40 object-cover" 
+              />
+              <span className="mt-2">{files[0].name}</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <img 
+                src={pixelCanvas} 
+                alt="픽셀 아트" 
+                className="w-40 h-40 object-cover" 
+              />
+              <span className="mt-2">픽셀 아트</span>
+            </div>
           </div>
         )}
         <canvas id="pixelitcanvas" ref={canvasRef} className="hidden"></canvas>
         <div className="flex justify-end">
-          <button className="bg-blue-500 text-white p-2 rounded mr-2" onClick={handleUpload}>
-            업로드
-          </button>
-          <button className="bg-gray-300 p-2 rounded" onClick={onClose}>
-            취소
-          </button>
+          {pixelCanvas && (
+            <button className="bg-blue-500 text-white p-2 rounded mr-2" onClick={handleUpload}>
+              업로드
+            </button>
+          )}
         </div>
       </div>
     </div>
