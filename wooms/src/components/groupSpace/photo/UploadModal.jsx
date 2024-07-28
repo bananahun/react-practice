@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import pixelit from '../libs/pixelit';
+import pixelit from '../../../libs/pixelit';
 
 function UploadModal({ onClose }) {
   const [files, setFiles] = useState([]);
   const [pixelCanvas, setPixelCanvas] = useState(null);
+  const [pixelScale, setPixelScale] = useState(10);
+  const [loading, setLoading] = useState(false);
   const canvasRef = useRef(null);
 
   const handleDragOver = (e) => {
@@ -32,18 +34,20 @@ function UploadModal({ onClose }) {
     onClose();
   };
 
-  useEffect(() => {
+  const handleTransform = () => {
     if (files.length > 0) {
+      setLoading(true);
       const imgFile = files[0]; // 첫 번째 파일을 사용
       const canvas = canvasRef.current;
       if (!canvas) {
         console.error('Canvas element not found');
+        setLoading(false);
         return;
       }
 
       const px = new pixelit({
         to: canvas,
-        scale: 25, // 원하는 픽셀화 정도 설정
+        scale: pixelScale, // 픽셀화 정도를 상태값으로 설정
         palette: [ // 사용자 정의 팔레트 설정 (RGB 값)
           [46, 34, 47],    // FF2e222f
           [62, 53, 70],    // FF3e3546
@@ -120,11 +124,12 @@ function UploadModal({ onClose }) {
           // 이미지가 완전히 로드된 후에 픽셀화 처리
           px.setFromImgSource(img.src).draw().pixelate().convertPalette();
           setPixelCanvas(canvas.toDataURL()); // 캔버스의 데이터를 상태에 저장
+          setLoading(false);
         };
       };
       reader.readAsDataURL(imgFile);
     }
-  }, [files]);
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center m-0 p-0">
@@ -132,7 +137,7 @@ function UploadModal({ onClose }) {
       <div className="bg-modal-bg bg-cover bg-center p-0 rounded-lg w-[700px] h-[447px] relative flex flex-col justify-center m-0 p-0">
         {/* 닫힘 버튼 */}
         <button className="absolute top-3 left-5 w-6 h-6 bg-close-bt bg-cover" onClick={onClose} />
-        {!pixelCanvas ? (
+        {!pixelCanvas && !loading ? (
           <div
             onDragOver={handleDragOver}
             onDrop={handleDrop}
@@ -166,17 +171,42 @@ function UploadModal({ onClose }) {
               <span className="mt-2">{files[0].name}</span>
             </div>
             <div className="flex flex-col items-center">
-              <img 
-                src={pixelCanvas} 
-                alt="픽셀 아트" 
-                className="w-40 h-40 object-cover" 
-              />
-              <span className="mt-2">픽셀 아트</span>
+              {loading ? (
+                <p>로딩중...</p>
+              ) : (
+                <>
+                  <img 
+                    src={pixelCanvas} 
+                    alt="픽셀 아트" 
+                    className="w-40 h-40 object-cover" 
+                  />
+                  <span className="mt-2">픽셀 아트</span>
+                </>
+              )}
             </div>
           </div>
         )}
         <canvas id="pixelitcanvas" ref={canvasRef} className="hidden"></canvas>
+        <div className="flex flex-col items-center mb-4">
+          <label htmlFor="pixel-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            픽셀화 정도: {pixelScale}
+          </label>
+          <input 
+            id="pixel-range" 
+            type="range" 
+            min="2" 
+            max="25" 
+            value={pixelScale} 
+            onChange={(e) => setPixelScale(parseInt(e.target.value))} 
+            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+          />
+        </div>
         <div className="flex justify-end">
+          {files.length > 0 && (
+            <button className="bg-green-500 text-white p-2 rounded mr-2" onClick={handleTransform}>
+              변환하기
+            </button>
+          )}
           {pixelCanvas && (
             <button className="bg-blue-500 text-white p-2 rounded mr-2" onClick={handleUpload}>
               업로드
